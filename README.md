@@ -1,3 +1,3 @@
 # cucumberBDD
 
-## This project contains example where feature file reads JSON file to load test data and then run it.
+#### This project contains example where Step Definition reads JSON file to load test data for scenarios defined in feature file and then run them.
