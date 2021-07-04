@@ -1,0 +1,12 @@
+[
+  {
+    "name": "test",
+    "endPoint": "/getTime",
+    "status": 200
+  },
+  {
+    "name": "newTest",
+    "endPoint": "/time",
+    "status": 404
+  }
+]
