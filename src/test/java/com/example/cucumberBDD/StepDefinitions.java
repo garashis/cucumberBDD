@@ -2,27 +2,21 @@ package com.example.cucumberBDD;
 
 import io.cucumber.java.en.Given;
 import org.junit.Assert;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.web.client.RestTemplate;
 
 public class StepDefinitions {
-    private final String SERVER_URL = "http://localhost";
-    private final RestTemplate restTemplate = new RestTemplate();
-    @LocalServerPort
-    private int port;
+    private final TestRestTemplate restTemplate;
+    private final String basePath;
 
-    @Autowired
-    private RestClient httpClient;
+    public StepDefinitions(@LocalServerPort int port, TestRestTemplate restTemplate) {
+        basePath = "http://localhost:" + port;
+        this.restTemplate = restTemplate;
+    }
 
-    private int actualStatus;
-
-    @Given("^I want to test (.+)$")
-    public void i_have_cukes_in_my_belly(String event) throws Throwable {
+    @Given("^I want to test (.+) event$")
+    public void i_want_to_test_event(String event) {
         Data data = JsonDataReader.INSTANCE.getCustomerByName(event);
-        int status = restTemplate.getForEntity(SERVER_URL + ":" + port + data.getEndPoint(), String.class).getStatusCodeValue();
-        System.out.println(">>>>>>>>>> " + status);
-
-        Assert.assertEquals(data.getStatus(), restTemplate.getForEntity(SERVER_URL + ":" + port + data.getEndPoint(), String.class).getStatusCodeValue());
+        Assert.assertEquals(data.getStatus(), restTemplate.getForEntity(basePath + data.getEndPoint(), String.class).getStatusCodeValue());
     }
 }
