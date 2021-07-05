@@ -1,9 +1,18 @@
 package com.example.cucumberBDD;
 
 public class Data {
+    private EventRequest eventRequest;
     private String name;
     private String endPoint;
     private int status;
+
+    public EventRequest getEventRequest() {
+        return eventRequest;
+    }
+
+    public void setEventRequest(EventRequest eventRequest) {
+        this.eventRequest = eventRequest;
+    }
 
     public String getName() {
         return name;

@@ -1,0 +1,14 @@
+{
+  "eventRequest": {
+    "event": "addUser",
+    "workflowFields": [
+      {
+        "name": "user",
+        "type": "String",
+        "mandatory": true
+      }
+    ]
+  },
+  "endPoint": "/event",
+  "status": 200
+}
