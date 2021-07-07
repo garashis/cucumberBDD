@@ -1,5 +1,14 @@
 {
-  "name": "newTest",
-  "endPoint": "/time",
+  "eventRequest": {
+    "event": "removeUser",
+    "workflowFields": [
+      {
+        "name": "user",
+        "type": "String",
+        "mandatory": true
+      }
+    ]
+  },
+  "endPoint": "/wrongEndPoint",
   "status": 404
 }

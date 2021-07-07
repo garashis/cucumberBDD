@@ -15,12 +15,8 @@ public class CucumberSpringConfiguration {
 
     private static final Logger LOG = LoggerFactory.getLogger(CucumberSpringConfiguration.class);
 
-    /**
-     * Need this method so the cucumber will recognize this class as glue and load spring context configuration
-     */
-    //@Before
+    @Before
     public void setUp() {
         LOG.info("-------------- Spring Context Initialized For Executing Cucumber Tests --------------");
     }
-
 }

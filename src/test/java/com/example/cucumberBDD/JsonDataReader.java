@@ -1,17 +1,16 @@
 package com.example.cucumberBDD;
 
 import io.cucumber.messages.internal.com.google.gson.Gson;
+import org.springframework.http.HttpMethod;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public enum JsonDataReader {
     INSTANCE;
     private List<Data> customerList;
-
     private List<Data> getCustomerData() {
         if (customerList != null) {
             return customerList;
@@ -30,27 +29,12 @@ public enum JsonDataReader {
     }
 
     public final Data loadEventData(String event) {
-
-        try (BufferedReader bufferReader = new BufferedReader(new FileReader("src/test/resources/" + event + ".json"))) {
+        String fileName = "src/test/resources/" + event + ".json";
+        try (BufferedReader bufferReader = new BufferedReader(new FileReader(fileName))) {
             Gson gson = new Gson();
-
-//            Data d = new Data();
-//            EventRequest er = new EventRequest();
-//            er.setEvent("addUser");
-//            List<WorkflowField> fields = new ArrayList<>();
-//            WorkflowField f = new WorkflowField();
-//            f.setMandatory(true);
-//            f.setName("user");
-//            f.setType("String");
-//            fields.add(f);
-//            er.setWorkflowFields(fields);
-//            d.setEventRequest(er);
-//
-//            System.out.println(gson.toJson(d));
-
             return gson.fromJson(bufferReader, Data.class);
         } catch (Exception e) {
-            throw new RuntimeException("Json file not found at path : " + "data.json");
+            throw new RuntimeException("Json file not found at path : " + fileName);
         }
     }
 }
