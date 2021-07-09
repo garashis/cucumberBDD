@@ -22,6 +22,8 @@ public class StepDefinitions {
     @Given("^I want to test (.+) event$")
     public void i_want_to_test_event(String event) {
         Data data = JsonDataReader.INSTANCE.loadEventData(event);
+
+        JsonDataReader.INSTANCE.validateJson("point");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<EventRequest> request = new HttpEntity<>(data.getEventRequest(), headers);

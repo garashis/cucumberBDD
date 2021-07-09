@@ -5,4 +5,3 @@ Feature: Belly
     Examples:
       | event       |
       | addUser     |
-      | removeUser  |
