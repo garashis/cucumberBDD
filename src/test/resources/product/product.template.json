@@ -1,0 +1,16 @@
+
+{
+  "productId": {productId},
+  "productName": "{productName}",
+  "price": {price},
+  "tags": [ {tags} ],
+  "dimensions": {
+    "length": {length},
+    "width": {width},
+    "height": {height}
+  },
+  "warehouseLocation": {
+    "latitude": {latitude},
+    "longitude": {longitude}
+  }
+}

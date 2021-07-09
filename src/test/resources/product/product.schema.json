@@ -37,7 +37,7 @@
     },
     "warehouseLocation": {
       "description": "Coordinates of the warehouse where the product is located.",
-      "$ref": "file:src/test/resources/point/geo-location.schema.json"
+      "$ref": "file:src/test/resources/product/geo-location.schema.json"
     }
   },
   "required": [

@@ -1,14 +1,12 @@
 package com.example.cucumberBDD;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
-import org.junit.Assert;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
+
+import java.util.List;
+import java.util.Map;
 
 public class StepDefinitions {
     private final TestRestTemplate restTemplate;
@@ -19,14 +17,18 @@ public class StepDefinitions {
         this.restTemplate = restTemplate;
     }
 
-    @Given("^I want to test (.+) event$")
-    public void i_want_to_test_event(String event) {
-        Data data = JsonDataReader.INSTANCE.loadEventData(event);
-
-        JsonDataReader.INSTANCE.validateJson("point");
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<EventRequest> request = new HttpEntity<>(data.getEventRequest(), headers);
-        Assert.assertEquals(data.getStatus(), restTemplate.postForEntity(basePath + data.getEndPoint(), request, String.class).getStatusCodeValue());
+    @Given("^I have the following details about products$")
+    public void haveBooksInTheStoreByMap(DataTable table) {
+        List<Map<String, String>> rows = table.asMaps(String.class, String.class);
+        String template = JsonDataReader.INSTANCE.loadJSONTemplate("product");
+        for (Map<String, String> row : rows) {
+            String jsonTemplate = new String(template);
+            for (Map.Entry<String, String> entry : row.entrySet()) {
+                jsonTemplate = jsonTemplate.replace(String.format("{%s}", entry.getKey()), entry.getValue());
+            }
+            System.out.println(jsonTemplate);
+            JsonDataReader.INSTANCE.validateJson("product", jsonTemplate);
+        }
+//        System.out.println(template);
     }
 }

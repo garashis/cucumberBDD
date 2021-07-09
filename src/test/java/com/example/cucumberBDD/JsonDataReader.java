@@ -2,23 +2,20 @@ package com.example.cucumberBDD;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.networknt.schema.JsonSchema;
-import com.networknt.schema.JsonSchemaFactory;
-import com.networknt.schema.SpecVersion;
-import com.networknt.schema.ValidationMessage;
-import io.cucumber.messages.internal.com.google.gson.Gson;
+import com.networknt.schema.*;
 
-import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Set;
 
 public enum JsonDataReader {
     INSTANCE;
     private List<Data> customerList;
+/*
 
     private List<Data> getCustomerData() {
         if (customerList != null) {
@@ -36,44 +33,44 @@ public enum JsonDataReader {
     public final Data getCustomerByName(String name) {
         return getCustomerData().stream().filter(x -> x.getName().equalsIgnoreCase(name)).findAny().get();
     }
+*/
 
-    public final Data loadEventData(String event) {
-        String fileName = "src/test/resources/" + event + ".json";
-        try (BufferedReader bufferReader = new BufferedReader(new FileReader(fileName))) {
-            Gson gson = new Gson();
-            return gson.fromJson(bufferReader, Data.class);
-        } catch (Exception e) {
-            throw new RuntimeException("Json file not found at path : " + fileName);
+    public String loadJSONTemplate(String template) {
+        String filePath = "src/test/resources/" + template + "/" + template + ".template.json";
+        try {
+            return new String(Files.readAllBytes(Paths.get(filePath)));
+        } catch (IOException e) {
+            throw new RuntimeException("Json doesn't match to schema : " + e.getMessage());
         }
     }
 
-    protected void validateJson(String name) {
-        String schemaPath = "src/test/resources/" + name + "/" + name + ".schema.json";
-        String jsonPath = "src/test/resources/" + name + "/" + name + ".json";
-        JsonSchema schema = getJsonSchemaFromClasspath(schemaPath);
-        JsonNode node = getJsonNodeFromClasspath(jsonPath);
-        Set<ValidationMessage> errors = schema.validate(node);
+    protected void validateJson(String schemaName, String json) {
+        String schemaPath = "src/test/resources/" + schemaName + "/" + schemaName + ".schema.json";
+        JsonSchema schema = getJsonSchema(schemaPath);
+        Set<ValidationMessage> errors = schema.validate(getJsonNode(json));
+        ValidationResult error = schema.validateAndCollect(getJsonNode(json));
+        error.getCollectorContext();
         if (!errors.isEmpty()) {
+            System.out.println(json);
             throw new RuntimeException("Json doesn't match to schema : " + errors);
         }
     }
 
-    protected JsonSchema getJsonSchemaFromClasspath(String schemaPath) {
+    protected JsonSchema getJsonSchema(String schemaPath) {
         JsonSchemaFactory factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7);
         try (InputStream bufferReader = new FileInputStream(schemaPath)) {
             return factory.getSchema(bufferReader);
         } catch (Exception e) {
-            throw new RuntimeException("Json file not found at path : " + schemaPath);
+            throw new RuntimeException("Error reading JSON schema: " + e.getMessage());
         }
-
     }
 
-    protected JsonNode getJsonNodeFromClasspath(String jsonPath) {
+    protected JsonNode getJsonNode(String json) {
         ObjectMapper mapper = new ObjectMapper();
-        try (InputStream bufferReader = new FileInputStream(jsonPath)) {
-            return mapper.readTree(bufferReader);
+        try {
+            return mapper.readTree(json);
         } catch (Exception e) {
-            throw new RuntimeException("Json file not found at path : " + jsonPath);
+            throw new RuntimeException("Error converting JSON string to JsonNode : " + e.getMessage());
         }
     }
 }
