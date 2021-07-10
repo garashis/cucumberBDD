@@ -9,19 +9,21 @@ import java.util.List;
 import java.util.Map;
 
 public class StepDefinitions {
+    public static final String JSON_TEMPLATE = "jsonTemplate";
     private final TestRestTemplate restTemplate;
     private final String basePath;
+    private String templateName;
+
 
     public StepDefinitions(@LocalServerPort int port, TestRestTemplate restTemplate) {
         basePath = "http://localhost:" + port;
         this.restTemplate = restTemplate;
     }
 
-    @Given("product details")
+    @Given("product details in JSON template and validate")
     public void tableWithExample(Map<String, String> row) {
-        System.out.println(row);
-        String template = JsonDataReader.loadJSONTemplate(row.get("template"));
-        processRow(template, row);
+        templateName = row.get(JSON_TEMPLATE);
+        processRow(JsonDataReader.loadJSONTemplate(templateName), row);
     }
 
     @Given("^I have the following details about products$")
@@ -34,12 +36,11 @@ public class StepDefinitions {
 //        System.out.println(template);
     }
 
-    private void processRow(String template, Map<String, String> row) {
-        String jsonTemplate = new String(template);
+    private void processRow(String jsonTemplate, Map<String, String> row) {
         for (Map.Entry<String, String> entry : row.entrySet()) {
             jsonTemplate = jsonTemplate.replace(String.format("{%s}", entry.getKey()), entry.getValue());
         }
         System.out.println(jsonTemplate);
-        JsonDataReader.validateJson(row.get("template"), jsonTemplate);
+        JsonDataReader.validateJson(templateName, jsonTemplate);
     }
 }
