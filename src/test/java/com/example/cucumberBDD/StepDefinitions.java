@@ -17,18 +17,29 @@ public class StepDefinitions {
         this.restTemplate = restTemplate;
     }
 
+    @Given("product details")
+    public void tableWithExample(Map<String, String> row) {
+        System.out.println(row);
+        String template = JsonDataReader.loadJSONTemplate(row.get("template"));
+        processRow(template, row);
+    }
+
     @Given("^I have the following details about products$")
     public void haveBooksInTheStoreByMap(DataTable table) {
         List<Map<String, String>> rows = table.asMaps(String.class, String.class);
-        String template = JsonDataReader.INSTANCE.loadJSONTemplate("product");
+        String template = JsonDataReader.loadJSONTemplate("product");
         for (Map<String, String> row : rows) {
-            String jsonTemplate = new String(template);
-            for (Map.Entry<String, String> entry : row.entrySet()) {
-                jsonTemplate = jsonTemplate.replace(String.format("{%s}", entry.getKey()), entry.getValue());
-            }
-            System.out.println(jsonTemplate);
-            JsonDataReader.INSTANCE.validateJson("product", jsonTemplate);
+            processRow(template, row);
         }
 //        System.out.println(template);
+    }
+
+    private void processRow(String template, Map<String, String> row) {
+        String jsonTemplate = new String(template);
+        for (Map.Entry<String, String> entry : row.entrySet()) {
+            jsonTemplate = jsonTemplate.replace(String.format("{%s}", entry.getKey()), entry.getValue());
+        }
+        System.out.println(jsonTemplate);
+        JsonDataReader.validateJson(row.get("template"), jsonTemplate);
     }
 }

@@ -12,8 +12,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Set;
 
-public enum JsonDataReader {
-    INSTANCE;
+public final class JsonDataReader {
     private List<Data> customerList;
 /*
 
@@ -35,7 +34,7 @@ public enum JsonDataReader {
     }
 */
 
-    public String loadJSONTemplate(String template) {
+    public static String loadJSONTemplate(String template) {
         String filePath = "src/test/resources/" + template + "/" + template + ".template.json";
         try {
             return new String(Files.readAllBytes(Paths.get(filePath)));
@@ -44,7 +43,7 @@ public enum JsonDataReader {
         }
     }
 
-    protected void validateJson(String schemaName, String json) {
+    protected static void validateJson(String schemaName, String json) {
         String schemaPath = "src/test/resources/" + schemaName + "/" + schemaName + ".schema.json";
         JsonSchema schema = getJsonSchema(schemaPath);
         Set<ValidationMessage> errors = schema.validate(getJsonNode(json));
@@ -56,7 +55,7 @@ public enum JsonDataReader {
         }
     }
 
-    protected JsonSchema getJsonSchema(String schemaPath) {
+    protected static JsonSchema getJsonSchema(String schemaPath) {
         JsonSchemaFactory factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7);
         try (InputStream bufferReader = new FileInputStream(schemaPath)) {
             return factory.getSchema(bufferReader);
@@ -65,7 +64,7 @@ public enum JsonDataReader {
         }
     }
 
-    protected JsonNode getJsonNode(String json) {
+    protected static JsonNode getJsonNode(String json) {
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.readTree(json);
