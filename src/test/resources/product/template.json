@@ -1,0 +1,27 @@
+{
+  "request": {
+    "url": "/myEndpoint",
+    "method": "POST",
+    "headers": {"Content-Type": "application/json"},
+    "body": {
+        "productId": {productId},
+        "productName": "{productName}",
+        "price": {price},
+        "tags": [ {tags} ],
+        "dimensions": {
+          "length": {length},
+          "width": {width},
+          "height": {height}
+        },
+        "warehouseLocation": {
+          "latitude": {latitude},
+          "longitude": {longitude}
+        }
+      }
+  },
+  "expectedResponse": {
+    "header" : {},
+    "body": {},
+    "statusCode": 200
+  }
+}

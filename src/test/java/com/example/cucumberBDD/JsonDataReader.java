@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 public final class JsonDataReader {
-    private List<Data> customerList;
+
 /*
 
     private List<Data> getCustomerData() {
