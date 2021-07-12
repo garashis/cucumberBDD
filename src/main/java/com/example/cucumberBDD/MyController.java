@@ -15,9 +15,9 @@ public class MyController {
         return LocalDateTime.now().toString();
     }
 
-    @PostMapping("/event")
-    public String event(@RequestBody EventRequest req){
-        System.out.println(req.getEvent());
+    @PostMapping("/myEndpoint")
+    public String event(@RequestBody Product req){
+//        System.out.println("MyController req >>> " + req);
         return LocalDateTime.now().toString();
     }
 }

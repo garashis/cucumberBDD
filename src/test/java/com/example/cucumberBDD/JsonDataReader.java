@@ -35,7 +35,7 @@ public final class JsonDataReader {
 */
 
     public static String loadJSONTemplate(String template) {
-        String filePath = "src/test/resources/" + template + "/" + template + ".template.json";
+        String filePath = "src/test/resources/" + template + "/" + "template.json";
         try {
             return new String(Files.readAllBytes(Paths.get(filePath)));
         } catch (IOException e) {
@@ -44,7 +44,7 @@ public final class JsonDataReader {
     }
 
     protected static void validateJson(String schemaName, String json) {
-        String schemaPath = "src/test/resources/" + schemaName + "/" + schemaName + ".schema.json";
+        String schemaPath = "src/test/resources/" + schemaName + "/" + "schema.json";
         JsonSchema schema = getJsonSchema(schemaPath);
         Set<ValidationMessage> errors = schema.validate(getJsonNode(json));
         ValidationResult error = schema.validateAndCollect(getJsonNode(json));
