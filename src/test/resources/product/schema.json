@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Product request and expected resposne",
+  "description": "A product from catalog",
+  "type": "object",
+  "properties": {
+    "request": {
+      "properties": {
+        "headers": {
+          "type": "object"
+        },
+        "method": {
+          "const": "POST"
+        },
+        "body": {
+          "$ref": "file:src/test/resources/product/requestBody.schema.json"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri-reference"
+        }
+      },
+      "required": [
+        "url",
+        "headers",
+        "method",
+        "body"
+      ]
+    },
+    "expectedResponse": {
+      "properties": {
+        "statusCode": {
+          "type": "integer"
+        },
+        "header": {
+          "type": "object"
+        },
+        "body": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "header",
+        "body",
+        "statusCode"
+      ]
+    }
+  },
+  "required": [
+    "request",
+    "expectedResponse"
+  ]
+}
