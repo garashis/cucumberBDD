@@ -1,3 +1,3 @@
-# Cucumber BDD - Data Driven Test
+# Cucumber BDD - Data Driven Test Framework
 
 #### This project contains example where Step Definition reads JSON file to load test data for scenarios defined in feature file and then run them.
