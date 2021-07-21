@@ -2,14 +2,16 @@ package com.example.cucumberBDD;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.networknt.schema.*;
+import com.networknt.schema.JsonSchema;
+import com.networknt.schema.JsonSchemaFactory;
+import com.networknt.schema.SpecVersion;
+import com.networknt.schema.ValidationMessage;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Set;
 
 public final class JsonDataReader {
@@ -47,10 +49,7 @@ public final class JsonDataReader {
         String schemaPath = "src/test/resources/" + schemaName + "/" + "schema.json";
         JsonSchema schema = getJsonSchema(schemaPath);
         Set<ValidationMessage> errors = schema.validate(getJsonNode(json));
-        ValidationResult error = schema.validateAndCollect(getJsonNode(json));
-        error.getCollectorContext();
         if (!errors.isEmpty()) {
-            System.out.println(json);
             throw new RuntimeException("Json doesn't match to schema : " + errors);
         }
     }
